@@ -1,134 +1,118 @@
-// function outer() {
-//   let a = "String";
-//   let b = { name: "B" };
-//   console.log(a, b);
-//   function inner(a, b) {
-//     console.log(a, b);
-//     a = "Newer String";
-//     b = { name: "new Object" };
-//     b.name = "lol";
-//     console.log(a, b);
-//   }
+//Selected elements
 
-//   inner(a, b);
-//   console.log(a, b);
-// }
+// const playButton = document.querySelector(".play");
+// const results = document.querySelector(".results");
+// let resultsOfGame = document.createElement("h2");
+// throw new Error("oops");
+class Player {
+  constructor(name) {
+    this.name = name;
+    this.points = 0;
+  }
 
-// outer();
+  getHand() {
+    return this.hand;
+  }
 
-// const answer = ((base, exponent) => {
-//   for (let i = exponent; i > 1; i--) {
-//     base *= 2;
-//   }
-//   return base;
-// })(2, 2);
+  wonGame() {
+    this.points++;
+  }
 
-// console.log(answer);
-
-// function exponentRecursion(base, exponent) {
-//   //   console.log(typeof base);
-//   if (exponent == 0) return 1;
-//   return (base *= exponentRecursion(base, exponent - 1));
-// }
-
-// console.log(exponentRecursion(2, 3));
-
-//code from previous activities above
-
-// ROCK PAPER SCISSORS
-
-const hands = ["rock", "paper", "scissors"];
-
-function getHand(arr) {
-  return arr[Math.trunc(Math.random() * 3)];
+  resetPoints() {
+    this.points = 0;
+  }
 }
 
-const playRound = function (player1, player2) {
-  const player1Hand = player1.getHand(hands);
-  const player2Hand = player2.getHand(hands);
-  console.log(
-    `${player1.name} chose ${player1Hand} and ${player2.name} chose ${player2Hand}`
-  );
-  if (
-    (player1Hand === "rock" && player2Hand === "scissors") ||
-    (player1Hand === "paper" && player2Hand === "rock") ||
-    (player1Hand === "scissors" && player2Hand === "paper")
-  ) {
-    console.log(`${player1.name} won the hand!`);
-    return player1;
-  } else if (player1Hand === player2Hand) {
-    console.log(`It's a tie!`);
-    return null;
-  } else {
-    console.log(`${player2.name} won the hand!`);
-    return player2;
+class gameVisuals {
+  constructor(game) {
+    this.game = game;
   }
-};
+}
 
-const playGame = function (player1, player2, playUntil) {
-  let player1Wins = playUntil;
-  let player2Wins = playUntil;
+class Game {
+  playButton = document.querySelector(".play");
+  results = document.querySelector(".results");
+  resultsOfGame = document.createElement("h2");
+  numOfRounds;
 
-  while (player1Wins > 0 && player2Wins > 0) {
-    const winner = playRound(player1, player2);
-    if (winner === player1) player1Wins--;
-    if (winner === player2) player2Wins--;
+  constructor(player1, player2) {
+    this.player1 = player1;
+    this.player2 = player2;
+    this.playButton.addEventListener("click", (e) => {
+      game.playRound();
+    });
   }
 
-  if (player1Wins === 0) {
-    console.log(`${player1.name} wins the game!`);
-    return player1;
-  } else {
-    console.log(`${player2.name} wins the game!`);
-    return player2;
+  playRound() {
+    let player1Hand = document.querySelector(".player-one-hand").value;
+    let player2Hand = document.querySelector(".player-two-hand").value;
+    (function () {
+      this.results.innerHTML = "";
+      this.resultsOfGame = `<h2>${this.player1.name} chose ${player1Hand} and ${this.player2.name} chose ${player2Hand}</h2>`;
+      this.results.innerHTML = this.resultsOfGame;
+      if (
+        (player1Hand === "rock" && player2Hand === "scissors") ||
+        (player1Hand === "paper" && player2Hand === "rock") ||
+        (player1Hand === "scissors" && player2Hand === "paper")
+      ) {
+        this.results.insertAdjacentHTML(
+          "beforeend",
+          `<h3>${this.player1.name} won the hand!</h3>`
+        );
+        this.player1.wonGame();
+      } else if (player1Hand === player2Hand) {
+        console.log(`It's a tie!`);
+      } else {
+        this.results.insertAdjacentHTML(
+          "beforeend",
+          `<h3>${this.player2.name} won the hand!</h3>`
+        );
+        this.player2.wonGame();
+      }
+    }.bind(game)());
+    this.declareWinner.call(game);
+    console.log(
+      `${this.player1.name} chose ${player1Hand} and ${this.player2.name} chose ${player2Hand}`
+    );
   }
-};
 
+  declareWinner() {
+    this.numOfRounds = document.querySelector(".rounds").value;
+    if (this.player1.points === Number(this.numOfRounds)) {
+      this.results.innerHTML = `<h3>${this.player1.name} won the game!</h3>`;
+      this.player1.resetPoints();
+      this.player2.resetPoints();
+    }
+    if (this.player2.points === Number(this.numOfRounds)) {
+      this.results.innerHTML = `<h3>${this.player2.name} won the game!</h3>`;
+      this.player1.resetPoints();
+      this.player2.resetPoints();
+    }
+  }
+}
+
+const game = new Game(new Player("John"), new Player("Kalynn"));
+
+// playButton.addEventListener("click", (e) => {
+//   game.playRound();
+// });
 // console.log(getHand(hands));
-
-const player1 = {
-  name: "John",
-  getHand: (arr) => {
-    return arr[Math.trunc(Math.random() * 3)];
-  },
-};
-
-const player2 = {
-  name: "Kalynn",
-  getHand: (arr) => {
-    return arr[Math.trunc(Math.random() * 3)];
-  },
-};
-
-const player3 = {
-  name: "Noah",
-  getHand: (arr) => {
-    return arr[Math.trunc(Math.random() * 3)];
-  },
-};
-
-const player4 = {
-  name: "Mary",
-  getHand: (arr) => {
-    return arr[Math.trunc(Math.random() * 3)];
-  },
-};
 
 // playRound(player1, player2);
 // playGame(player1, player2, 5);
 
-const playTournament = function (
-  player1,
-  player2,
-  player3,
-  player4,
-  playUntil
-) {
-  const winner1 = playGame(player1, player2, playUntil);
-  const winner2 = playGame(player3, player4, playUntil);
+// const playTournament = function (
+//   player1,
+//   player2,
+//   player3,
+//   player4,
+//   playUntil
+// ) {
+//   const winner1 = playGame(player1, player2, playUntil);
+//   const winner2 = playGame(player3, player4, playUntil);
 
-  const playTournament = playGame(winner1, winner2, playUntil);
-  console.log(`${playTournament.name} is the world champion!`);
-};
+//   const playTournament = playGame(winner1, winner2, playUntil);
+//   console.log(`${playTournament.name} is the world champion!`);
+// };
 
-playTournament(player1, player2, player3, player4, 3);
+// playTournament(player1, player2, player3, player4, 3);

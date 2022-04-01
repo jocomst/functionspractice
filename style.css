@@ -1,0 +1,29 @@
+.title {
+  display: flex;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.col h2 {
+  text-align: center;
+}
+
+.play {
+  display: flex;
+  align-items: center;
+}
+
+.rounds {
+  height: 30px;
+  font-size: 25px;
+  text-align: center;
+}
