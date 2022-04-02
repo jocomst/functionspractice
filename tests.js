@@ -15,7 +15,6 @@ class gameVisuals {
   player2Name = document.querySelector(".player-2-name");
   constructor(game) {
     this.game = game;
-    this.playerArr = [this.player1Name, player2Name];
     this.choiceSelector.forEach(el => {
       el.addEventListener("change", e => {
         this.changeImage(e);
