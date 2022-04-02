@@ -4,24 +4,25 @@
 // const results = document.querySelector(".results");
 // let resultsOfGame = document.createElement("h2");
 // throw new Error("oops");
-const p1Name = prompt("Player 1 name");
-const p2Name = prompt("Player 2 name");
+// const p1Name = prompt("Player 1 name");
+// const p2Name = prompt("Player 2 name");
 let player1Name;
 let player2Name;
 
 class gameVisuals {
   choiceSelector = document.querySelectorAll(".choices");
-  player1Name = document.querySelector("player-one-name");
-  player2Name = document.querySelector("player-two-name");
+  player1Name = document.querySelector(".player-1-name");
+  player2Name = document.querySelector(".player-2-name");
   constructor(game) {
     this.game = game;
-    this.choiceSelector.forEach((el) => {
-      el.addEventListener("change", (e) => {
+    this.playerArr = [this.player1Name, player2Name];
+    this.choiceSelector.forEach(el => {
+      el.addEventListener("change", e => {
         this.changeImage(e);
         // console.log(e.target);
       });
     });
-    this.addPlayerNames();
+    this.displayScore();
   }
 
   changeImage(e) {
@@ -37,6 +38,17 @@ class gameVisuals {
       player.src =
         "https://ca-times.brightspotcdn.com/dims4/default/51bf23e/2147483647/strip/true/crop/750x394+0+14/resize/1200x630!/quality/90/?url=https%3A%2F%2Fwww.trbimg.com%2Fimg-5436b8c6%2Fturbine%2Fzap-the-office-michaels-worst-moments-pics-012";
     }
+  }
+
+  //display score
+
+  displayScore() {
+    let replacer = document.createElement("h2");
+    replacer.innerText = `${this.game.player1.name}`;
+    this.player1Name.replaceWith(replacer);
+    replacer = document.createElement("h2");
+    replacer.innerText = `${this.game.player2.name}`;
+    this.player2Name.replaceWith(replacer);
   }
 
   // addPlayerNames() {
@@ -74,7 +86,7 @@ class Game {
   constructor(player1, player2) {
     this.player1 = player1;
     this.player2 = player2;
-    this.playButton.addEventListener("click", (e) => {
+    this.playButton.addEventListener("click", e => {
       game.playRound();
     });
   }
@@ -91,22 +103,26 @@ class Game {
         (player1Hand === "paper" && player2Hand === "rock") ||
         (player1Hand === "scissors" && player2Hand === "paper")
       ) {
-        this.results.insertAdjacentHTML(
-          "beforeend",
-          `<h3>${this.player1.name} won the hand!</h3>`
-        );
         this.player1.wonGame();
-      } else if (player1Hand === player2Hand) {
-        console.log(`It's a tie!`);
-      } else {
         this.results.insertAdjacentHTML(
           "beforeend",
-          `<h3>${this.player2.name} won the hand!</h3>`
+          `<h3>${this.player1.name} won the hand!\n Current score is ${this.player1.points} vs ${this.player2.points}</h3>`
         );
-        this.player2.wonGame();
+      } else if (player1Hand === player2Hand) {
+        this.results.insertAdjacentHTML(
+          "beforeend",
+          `<h3>It's a tie!\n Current score is ${this.player1.points} vs ${this.player2.points}</h3>`
+        );
+        return;
+      } else {
+        this.player1.wonGame();
+        this.results.insertAdjacentHTML(
+          "beforeend",
+          `<h3>${this.player2.name} won the hand!\n Current score is ${this.player1.points} vs ${this.player2.points}</h3>`
+        );
       }
+      this.declareWinner.call(game);
     }.bind(game)());
-    this.declareWinner.call(game);
     console.log(
       `${this.player1.name} chose ${player1Hand} and ${this.player2.name} chose ${player2Hand}`
     );
@@ -114,20 +130,22 @@ class Game {
 
   declareWinner() {
     this.numOfRounds = document.querySelector(".rounds").value;
-    if (this.player1.points === Number(this.numOfRounds)) {
-      this.results.innerHTML = `<h3>${this.player1.name} won the game!</h3>`;
-      this.player1.resetPoints();
-      this.player2.resetPoints();
-    }
-    if (this.player2.points === Number(this.numOfRounds)) {
-      this.results.innerHTML = `<h3>${this.player2.name} won the game!</h3>`;
-      this.player1.resetPoints();
-      this.player2.resetPoints();
+    if (this.numOfRounds !== "") {
+      if (this.player1.points === Number(this.numOfRounds)) {
+        this.results.innerHTML = `<h3>${this.player1.name} won the game!\n Final score is ${this.player1.points} vs ${this.player2.points}</h3>`;
+        this.player1.resetPoints();
+        this.player2.resetPoints();
+      }
+      if (this.player2.points === Number(this.numOfRounds)) {
+        this.results.innerHTML = `<h3>${this.player2.name} won the game!\n Final score is ${this.player1.points} vs ${this.player2.points}</h3>`;
+        this.player1.resetPoints();
+        this.player2.resetPoints();
+      }
     }
   }
 }
 
-const game = new Game(new Player(p1Name), new Player(p2Name));
+const game = new Game(new Player("Bill"), new Player("Bob"));
 const gameUI = new gameVisuals(game);
 
 // playButton.addEventListener("click", (e) => {

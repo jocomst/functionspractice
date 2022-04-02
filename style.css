@@ -1,3 +1,7 @@
+body {
+  background-color: aliceblue;
+}
+
 .title {
   display: flex;
   justify-content: center;
@@ -11,6 +15,10 @@
 .col {
   display: flex;
   flex-direction: column;
+}
+
+.middle {
+  justify-content: center;
 }
 
 .col h2 {
