@@ -15,8 +15,8 @@ class gameVisuals {
   player2Name = document.querySelector(".player-2-name");
   constructor(game) {
     this.game = game;
-    this.choiceSelector.forEach(el => {
-      el.addEventListener("change", e => {
+    this.choiceSelector.forEach((el) => {
+      el.addEventListener("change", (e) => {
         this.changeImage(e);
         // console.log(e.target);
       });
@@ -85,7 +85,7 @@ class Game {
   constructor(player1, player2) {
     this.player1 = player1;
     this.player2 = player2;
-    this.playButton.addEventListener("click", e => {
+    this.playButton.addEventListener("click", (e) => {
       game.playRound();
     });
   }
@@ -114,7 +114,7 @@ class Game {
         );
         return;
       } else {
-        this.player1.wonGame();
+        this.player2.wonGame();
         this.results.insertAdjacentHTML(
           "beforeend",
           `<h3>${this.player2.name} won the hand!\n Current score is ${this.player1.points} vs ${this.player2.points}</h3>`
